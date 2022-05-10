@@ -28,7 +28,9 @@ export default function handler(
     client.availablePhoneNumbers('US')
         .local
         .list({ areaCode: 503, limit: 20 })
+        // @ts-expect-error
         .then(local => res.status(200).json(local))
+        // @ts-expect-error
         .catch(error => res.status(500).json(error));
 
     // res.status(200).json({ accountSid, authToken })

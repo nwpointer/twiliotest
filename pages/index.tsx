@@ -11,6 +11,7 @@ const Home: NextPage = () => {
       const json = await res.json()
       console.log(json)
       setState(state => (
+        // @ts-expect-error
         { ...state, numbers: json.map(r => r.phoneNumber) }
       ))
     } catch {
@@ -37,7 +38,7 @@ const Home: NextPage = () => {
         </h1>
 
 
-        <button class="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded" onClick={fetchNumber}>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded" onClick={fetchNumber}>
           list available numbers
         </button>
 
