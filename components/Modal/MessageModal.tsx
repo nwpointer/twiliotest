@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Modal from './Modal';
+import Modal from '.';
 import { Dialog } from '@headlessui/react';
 
 

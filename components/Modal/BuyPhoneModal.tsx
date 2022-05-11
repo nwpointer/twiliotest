@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import Modal from './Modal';
-import Select from './Select';
+import Modal from '.';
+import Select from '../Select';
 import { Dialog } from '@headlessui/react';
-import LoadingIcon from './Loading';
+import LoadingIcon from '../Loading';
 
 export function BuyPhoneModal({ open, setOpen }: { open: boolean, setOpen: any }) {
     const [country, setCountry] = useState('US');

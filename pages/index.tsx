@@ -5,7 +5,7 @@ import { Transition } from '@headlessui/react'
 
 import { getActiveNumbers } from './api/sms'
 import { Table } from '../components/Table'
-import { BuyPhoneModal } from '../components/BuyPhoneModal'
+import { BuyPhoneModal } from '../components/Modal/BuyPhoneModal'
 
 export async function getServerSideProps() {
   const numbers = await getActiveNumbers();
