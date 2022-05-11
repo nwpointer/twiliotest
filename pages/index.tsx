@@ -1,57 +1,64 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useState } from 'react'
+import { Transition } from '@headlessui/react'
 
-const Home: NextPage = () => {
+import { getActiveNumbers } from './api/sms'
+import { Table } from '../components/Table'
+import { BuyPhoneModal } from '../components/BuyPhoneModal'
 
-  const fetchNumber = async () => {
-    try {
-      const res = await fetch('/api/sms/provission')
-      const json = await res.json()
-      console.log(json)
-      setState(state => (
-        // @ts-expect-error
-        { ...state, numbers: json.map(r => r.phoneNumber) }
-      ))
-    } catch {
-      console.log('error')
+export async function getServerSideProps() {
+  const numbers = await getActiveNumbers();
+  console.log(numbers);
+  return {
+    props: {
+      numbers
     }
-
   }
+}
 
-  const [state, setState] = useState({ numbers: [] })
+type Props = {
+  numbers: [{ body: string, dateSent: string }]
+}
+
+const Home = ({ numbers }: Props) => {
+
+  const [buyModalOpen, setByModalOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex min-h-screen flex-col justify-center py-2">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center px-20 text-center">
-        <h1 className="text-6xl font-bold mt-32 mb-16">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            ktools
-          </a>
-        </h1>
+      <BuyPhoneModal open={buyModalOpen} setOpen={setByModalOpen} />
 
-
-        <button className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded" onClick={fetchNumber}>
-          list available numbers
-        </button>
-
-        <br />
-
-        {state.numbers.map((number) => {
-          return <div key={number}>
-            {number}
+      <main className="flex w-full m-auto max-w-4xl flex-1 flex-col md:px-8 pt-4">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="sm:flex sm:items-center">
+            <div className="sm:flex-auto">
+              <h1 className="text-xl font-semibold text-gray-900">OPT Numbers</h1>
+              <p className="mt-2 text-sm text-gray-700">
+                Please remember to delete associated accounts after use.
+              </p>
+            </div>
+            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+              <button
+                onPointerDown={() => setByModalOpen(true)}
+                type="button"
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+              >
+                Add phone
+              </button>
+            </div>
           </div>
-        })}
+        </div>
+        <Table data={numbers} />
       </main>
     </div>
   )
 }
 
 export default Home
+
