@@ -11,8 +11,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const number = await getAvailableNumber(req.query.country as string);
         const provisionedNumber = await provisionNumber(number);
         res.status(200).json({ message: `Provisioned ${number}` })
-    } catch (e) {
-        res.status(500).json({ message: e.message })
+    } catch (err) {
+        // @ts-expect-error
+        const message: string = err.message || 'error';
+        res.status(500).json({ message })
     }
 }
 
@@ -23,5 +25,5 @@ const provisionNumber = async (phoneNumber: string) => {
 const getAvailableNumber = async (country: string) => {
     return twilio.availablePhoneNumbers('US').local
         .list({ limit: 1 })
-        .then(local => local[0].phoneNumber);
+        .then((local: [{ phoneNumber: string }]) => local[0].phoneNumber);
 }
