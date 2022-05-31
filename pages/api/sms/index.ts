@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const numbers = await getActiveNumbers();
         res.status(200).json({ numbers })
     } catch (e) {
-        console.log(e)
+        // console.log(e)
         res.status(500).json({ message: 'error' })
     }
 }
